@@ -11,7 +11,7 @@ import rx.Observable;
 public interface EbookApi {
 
 
-    String BASE_URL = "http://eba.sap-press.com";
+    String BASE_URL = "http://eba.sap-press.com/";
 
     @Headers({
             "x-project: sap-press",

@@ -9,6 +9,7 @@ import com.example.rct03.ebook_readerdm.data_service.UserServiceImpl;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import javax.inject.Singleton;
 
@@ -31,9 +32,10 @@ public class AppModule {
         this.app = app;
     }
 
+
     @Provides
     @Singleton
-    Context appContext() {
+    Application provideApplication() {
         return app;
     }
 
@@ -69,16 +71,17 @@ public class AppModule {
     @Singleton
     public EbookApi provideEbookApi(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(BASE_URL).client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(EbookApi.class);
     }
 
 
     @Provides
     @Singleton
-    UserService provideUserService(UserServiceImpl userService) {
-        return userService;
+    UserService provideUserService(EbookApi api) {
+        return new UserServiceImpl(api);
     }
 
 }
