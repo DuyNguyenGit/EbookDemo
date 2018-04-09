@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="rectangle">
+            <solid android:color="@color/blue_border_top_button"/>
+            <corners
+                android:radius="@dimen/radius_dialog"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"/>
+        </shape>
+    </item>
+    <item android:top="2dp">
+        <shape
+            android:shape="rectangle">
+            <corners
+                android:radius="@dimen/radius_dialog"
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"/>
+            <solid android:color="@color/blue_border_top_button"/>
+        </shape>
+    </item>
+</layer-list>

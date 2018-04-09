@@ -1,0 +1,48 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Radius and border -->
+    <dimen name="radius">1dp</dimen>
+    <dimen name="radius_dialog">5dp</dimen>
+    <dimen name="border">1dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="spacing_micro">2dp</dimen>
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_huge">32dp</dimen>
+
+    <!-- Font sizes -->
+    <dimen name="font_size_micro">12sp</dimen>
+    <dimen name="font_size_small">14sp</dimen>
+    <dimen name="font_size_medium">16sp</dimen>
+    <dimen name="font_size_large">18sp</dimen>
+    <dimen name="font_size_huge">24sp</dimen>
+
+    <!-- Image sizes WellCome -->
+    <dimen name="image_size">130dp</dimen>
+
+    <!-- Circle Indicator sizes WellCome-->
+    <dimen name="circle_indicator_size">10dp</dimen>
+
+    <!-- margin bottom slider hour step 3-->
+    <dimen name="margin_bottom_slider_hour">1dp</dimen>
+
+    <!-- Size box slider hour step 3-->
+    <dimen name="size_box_slider_hour">38dp</dimen>
+
+    <!-- Size box total book job step 3-->
+    <dimen name="size_box_total">110dp</dimen>
+
+    <!-- specify size element -->
+    <dimen name="logo_trustify_welcome">80dp</dimen>
+    <dimen name="toolbar_title_font_size">18sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <!-- margin right arrow spinner-->
+    <dimen name="margin_right_arrow_spinner">17dp</dimen>
+</resources>
