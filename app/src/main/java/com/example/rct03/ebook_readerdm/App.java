@@ -2,6 +2,9 @@ package com.example.rct03.ebook_readerdm;
 
 import android.app.Application;
 
+import com.example.rct03.ebook_readerdm.dicomponents.AppComponent;
+import com.example.rct03.ebook_readerdm.dicomponents.DaggerAppComponent;
+import com.example.rct03.ebook_readerdm.modules.AppModule;
 import com.example.rct03.ebook_readerdm.modules.NetModule;
 
 public class App extends Application {

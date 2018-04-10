@@ -1,6 +1,8 @@
-package com.example.rct03.ebook_readerdm;
+package com.example.rct03.ebook_readerdm.dicomponents;
 
 
+import com.example.rct03.ebook_readerdm.App;
+import com.example.rct03.ebook_readerdm.modules.AppModule;
 import com.example.rct03.ebook_readerdm.modules.NetModule;
 import com.example.rct03.ebook_readerdm.ui.MainActivity;
 

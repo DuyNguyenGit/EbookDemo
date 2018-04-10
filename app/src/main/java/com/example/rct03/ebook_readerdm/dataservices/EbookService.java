@@ -1,4 +1,4 @@
-package com.example.rct03.ebook_readerdm.data_service;
+package com.example.rct03.ebook_readerdm.dataservices;
 
 import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
 

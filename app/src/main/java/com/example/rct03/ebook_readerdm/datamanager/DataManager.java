@@ -1,4 +1,4 @@
-package com.example.rct03.ebook_readerdm.data_manager;
+package com.example.rct03.ebook_readerdm.datamanager;
 
 import android.content.Context;
 

@@ -3,11 +3,11 @@ package com.example.rct03.ebook_readerdm.modules;
 
 import android.app.Application;
 
-import com.example.rct03.ebook_readerdm.EbookApi;
-import com.example.rct03.ebook_readerdm.data_service.EbookService;
-import com.example.rct03.ebook_readerdm.data_service.EbookServiceImpl;
-import com.example.rct03.ebook_readerdm.data_service.UserService;
-import com.example.rct03.ebook_readerdm.data_service.UserServiceImpl;
+import com.example.rct03.ebook_readerdm.api.EbookApi;
+import com.example.rct03.ebook_readerdm.dataservices.EbookService;
+import com.example.rct03.ebook_readerdm.dataservices.EbookServiceImpl;
+import com.example.rct03.ebook_readerdm.dataservices.UserService;
+import com.example.rct03.ebook_readerdm.dataservices.UserServiceImpl;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,7 +23,7 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.rct03.ebook_readerdm.EbookApi.BASE_URL;
+import static com.example.rct03.ebook_readerdm.api.EbookApi.BASE_URL;
 
 @Module
 public class NetModule {

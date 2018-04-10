@@ -9,11 +9,11 @@ import android.widget.ProgressBar;
 
 import com.example.rct03.ebook_readerdm.App;
 import com.example.rct03.ebook_readerdm.R;
-import com.example.rct03.ebook_readerdm.data_service.EbookService;
-import com.example.rct03.ebook_readerdm.data_service.UserService;
+import com.example.rct03.ebook_readerdm.dataservices.EbookService;
+import com.example.rct03.ebook_readerdm.dataservices.UserService;
 import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
 import com.example.rct03.ebook_readerdm.models.user.User;
-import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
+import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -74,14 +74,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void handleResponse(LoginResponse loginResponse) {
-        Log.e(TAG, "signIn success: >>>" + new Gson().toJson(loginResponse));
-        getUserInfo(loginResponse);
-        getEbooks(loginResponse);
+    private void handleResponse(AuthToken authToken) {
+        Log.e(TAG, "signIn success: >>>" + new Gson().toJson(authToken));
+        getUserInfo(authToken);
+        getEbooks(authToken);
     }
 
-    private void getEbooks(LoginResponse loginResponse) {
-        final String token = "Token ".concat(loginResponse.getToken());
+    private void getEbooks(AuthToken authToken) {
+        final String token = "Token ".concat(authToken.getToken());
         final Disposable disposable = ebookService.getEbooks(token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "handleEbooks: >>>Title of Ebook  = " + ebooks.getEbooks().get(0).getTitle());
     }
 
-    private void getUserInfo(LoginResponse loginResponse) {
-        final String token = "Token ".concat(loginResponse.getToken());
+    private void getUserInfo(AuthToken authToken) {
+        final String token = "Token ".concat(authToken.getToken());
         final Disposable disposable = userService.getUserAccount(token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

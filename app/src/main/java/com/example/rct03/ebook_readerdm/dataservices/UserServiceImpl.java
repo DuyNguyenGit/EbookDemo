@@ -1,9 +1,8 @@
-package com.example.rct03.ebook_readerdm.data_service;
+package com.example.rct03.ebook_readerdm.dataservices;
 
-import com.example.rct03.ebook_readerdm.EbookApi;
-import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
+import com.example.rct03.ebook_readerdm.api.EbookApi;
 import com.example.rct03.ebook_readerdm.models.user.User;
-import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
+import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
 
 import javax.inject.Inject;
 
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Observable<LoginResponse> signIn(String user, String password) {
+    public Observable<AuthToken> signIn(String user, String password) {
         return ebookApi.getToken("christian@2denker.de",
                 "EZTwNrr93zqDKfpc",
                 "0",

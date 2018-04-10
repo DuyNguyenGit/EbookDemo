@@ -1,8 +1,8 @@
-package com.example.rct03.ebook_readerdm;
+package com.example.rct03.ebook_readerdm.api;
 
 import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
 import com.example.rct03.ebook_readerdm.models.user.User;
-import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
+import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -22,14 +22,14 @@ public interface EbookApi {
     })
     @FormUrlEncoded
     @POST("account/token")
-    Observable<LoginResponse> getToken(@Field("email") String first,
-                                       @Field("password") String password,
-                                       @Field("app_version") String appVersion,
-                                       @Field("device_id") String deviceId,
-                                       @Field("os_type") String osType,
-                                       @Field("os_version") String osVersion,
-                                       @Field("device_name") String deviceName,
-                                       @Field("device_name_manufacturer") String deviceManufacturer);
+    Observable<AuthToken> getToken(@Field("email") String first,
+                                   @Field("password") String password,
+                                   @Field("app_version") String appVersion,
+                                   @Field("device_id") String deviceId,
+                                   @Field("os_type") String osType,
+                                   @Field("os_version") String osVersion,
+                                   @Field("device_name") String deviceName,
+                                   @Field("device_name_manufacturer") String deviceManufacturer);
 
     @GET("account")
     Observable<User> getUser(@Header("Authorization") String authorization);

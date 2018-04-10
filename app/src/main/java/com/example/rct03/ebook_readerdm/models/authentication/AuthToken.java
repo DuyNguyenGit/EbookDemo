@@ -1,8 +1,8 @@
-package com.example.rct03.ebook_readerdm.models.responses;
+package com.example.rct03.ebook_readerdm.models.authentication;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginResponse extends BaseResponse {
+public class AuthToken {
 
     @SerializedName("token")
     private String token;
