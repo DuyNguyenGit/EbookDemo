@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.rct03.ebook_readerdm.App;
+import com.example.rct03.ebook_readerdm.EbookApi;
 import com.example.rct03.ebook_readerdm.R;
 import com.example.rct03.ebook_readerdm.data_service.UserService;
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
@@ -17,17 +18,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     @Inject
     UserService userService;
-
+    @Inject
+    EbookApi ebookApi;
 
     @BindView(R.id.edtEmail)
     EditText edtUsername;
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Unsubscribes the subscriptions and unbind views
+     * Unsubscribes the mCompositeDisposable and unbind views
      */
     @Override
     protected void onDestroy() {
-        if (null != subscriptions) {
-            subscriptions.clear();
-            subscriptions = null;
+        if (null != mCompositeDisposable) {
+            mCompositeDisposable.clear();
+            mCompositeDisposable = null;
         }
         super.onDestroy();
     }
@@ -62,23 +65,29 @@ public class MainActivity extends AppCompatActivity {
     public void signIn(View view) {
         final String email = edtUsername.getText().toString();
         final String password = edtPassword.getText().toString();
-        subscriptions.add(userService.signIn(email, password)
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(this::showLoading)
+        Disposable disposable = userService.signIn(email, password)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(loginResponse -> {
-                    Log.e(TAG, "signIn success: >>>" + new Gson().toJson(loginResponse));
-                }, throwable -> {
-                    hideLoading();
-                    Log.e(TAG, "signIn error: >>>" + throwable.getMessage());
-                }));
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse, this::handleError);
+
+        mCompositeDisposable.add(disposable);
+
+
     }
 
-
-
-    protected void showLoading() {
+    private void showLoading(Disposable disposable) {
         progressBar.setVisibility(View.VISIBLE);
     }
+
+    private void handleResponse(LoginResponse loginResponse) {
+        Log.e(TAG, "signIn success: >>>" + new Gson().toJson(loginResponse));
+    }
+    private void handleError(Throwable error) {
+        hideLoading();
+        Log.e(TAG, "signIn error: >>>" + error.getLocalizedMessage());
+    }
+
+
 
     protected void hideLoading() {
         progressBar.setVisibility(View.GONE);

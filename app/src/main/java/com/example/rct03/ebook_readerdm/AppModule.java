@@ -71,7 +71,7 @@ public class AppModule {
     @Singleton
     public EbookApi provideEbookApi(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL).client(okHttpClient)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(EbookApi.class);

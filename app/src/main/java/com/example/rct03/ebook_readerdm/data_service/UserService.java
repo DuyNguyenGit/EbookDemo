@@ -2,7 +2,8 @@ package com.example.rct03.ebook_readerdm.data_service;
 
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 public interface UserService {
 

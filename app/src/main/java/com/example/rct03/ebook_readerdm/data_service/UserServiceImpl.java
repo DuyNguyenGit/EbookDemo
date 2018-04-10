@@ -2,11 +2,11 @@ package com.example.rct03.ebook_readerdm.data_service;
 
 import com.example.rct03.ebook_readerdm.EbookApi;
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
-import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 public class UserServiceImpl implements UserService {
 

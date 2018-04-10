@@ -2,16 +2,16 @@ package com.example.rct03.ebook_readerdm;
 
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
 
+import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import rx.Observable;
 
 public interface EbookApi {
 
 
-    String BASE_URL = "http://eba.sap-press.com/";
+    String BASE_URL = "http://eba.sap-press.com";
 
     @Headers({
             "x-project: sap-press",
