@@ -45,43 +45,4 @@ public class AppModule {
         return new DbHelper(context);
     }
 
-    @Provides
-    @Singleton
-    Cache provideOkHttpCache(Application application) {
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-        return cache;
-    }
-
-    @Provides
-    @Singleton
-    Gson provideGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        return gsonBuilder.create();
-    }
-
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient(Cache cache) {
-        return new OkHttpClient();
-    }
-
-    @Provides
-    @Singleton
-    public EbookApi provideEbookApi(Gson gson, OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build().create(EbookApi.class);
-    }
-
-
-    @Provides
-    @Singleton
-    UserService provideUserService(EbookApi api) {
-        return new UserServiceImpl(api);
-    }
-
 }

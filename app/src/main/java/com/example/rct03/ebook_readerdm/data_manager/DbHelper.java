@@ -1,14 +1,9 @@
 package com.example.rct03.ebook_readerdm.data_manager;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.rct03.ebook_readerdm.models.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,14 +12,14 @@ import javax.inject.Singleton;
 public class DbHelper extends SQLiteOpenHelper {
 
     //USER TABLE
-    public static final String USER_TABLE_NAME = "users";
-    public static final String USER_COLUMN_USER_ID = "id";
-    public static final String USER_COLUMN_USER_NAME = "usr_name";
-    public static final String USER_COLUMN_USER_ADDRESS = "usr_add";
-    public static final String USER_COLUMN_USER_CREATED_AT = "created_at";
-    public static final String USER_COLUMN_USER_UPDATED_AT = "updated_at";
-    public static final String DB_NAME = "db1";
-    public static final int VERSION = 20;
+    private static final String USER_TABLE_NAME = "users";
+    private static final String USER_COLUMN_USER_ID = "id";
+    private static final String USER_COLUMN_USER_NAME = "usr_name";
+    private static final String USER_COLUMN_USER_ADDRESS = "usr_add";
+    private static final String USER_COLUMN_USER_CREATED_AT = "created_at";
+    private static final String USER_COLUMN_USER_UPDATED_AT = "updated_at";
+    private static final String DB_NAME = "db1";
+    private static final int VERSION = 20;
 
     @Inject
     public DbHelper(Context context) {
@@ -59,51 +54,51 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    protected User getUser(Long userId) throws Resources.NotFoundException, NullPointerException {
-        Cursor cursor = null;
-        try {
-            SQLiteDatabase db = this.getReadableDatabase();
-            cursor = db.rawQuery(
-                    "SELECT * FROM "
-                            + USER_TABLE_NAME
-                            + " WHERE "
-                            + USER_COLUMN_USER_ID
-                            + " = ? ",
-                    new String[]{userId + ""});
+//    protected User getUser(Long userId) throws Resources.NotFoundException, NullPointerException {
+//        Cursor cursor = null;
+//        try {
+//            SQLiteDatabase db = this.getReadableDatabase();
+//            cursor = db.rawQuery(
+//                    "SELECT * FROM "
+//                            + USER_TABLE_NAME
+//                            + " WHERE "
+//                            + USER_COLUMN_USER_ID
+//                            + " = ? ",
+//                    new String[]{userId + ""});
+//
+//            if (cursor.getCount() > 0) {
+//                cursor.moveToFirst();
+//                User user = new User();
+//                user.setId(cursor.getLong(cursor.getColumnIndex(USER_COLUMN_USER_ID)));
+//                user.setName(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_NAME)));
+//                user.setAddress(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_ADDRESS)));
+//                user.setCreatedAt(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_CREATED_AT)));
+//                user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_UPDATED_AT)));
+//                return user;
+//            } else {
+//                throw new Resources.NotFoundException("User with id " + userId + " does not exists");
+//            }
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//            throw e;
+//        } finally {
+//            if (cursor != null)
+//                cursor.close();
+//        }
+//    }
 
-            if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                User user = new User();
-                user.setId(cursor.getLong(cursor.getColumnIndex(USER_COLUMN_USER_ID)));
-                user.setName(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_NAME)));
-                user.setAddress(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_ADDRESS)));
-                user.setCreatedAt(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_CREATED_AT)));
-                user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(USER_COLUMN_USER_UPDATED_AT)));
-                return user;
-            } else {
-                throw new Resources.NotFoundException("User with id " + userId + " does not exists");
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-    }
-
-    protected Long insertUser(User user) throws Exception {
-        try {
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(USER_COLUMN_USER_NAME, user.getName());
-            contentValues.put(USER_COLUMN_USER_ADDRESS, user.getAddress());
-            return db.insert(USER_TABLE_NAME, null, contentValues);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
+//    protected Long insertUser(User user) throws Exception {
+//        try {
+//            SQLiteDatabase db = this.getWritableDatabase();
+//            ContentValues contentValues = new ContentValues();
+//            contentValues.put(USER_COLUMN_USER_NAME, user.getName());
+//            contentValues.put(USER_COLUMN_USER_ADDRESS, user.getAddress());
+//            return db.insert(USER_TABLE_NAME, null, contentValues);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw e;
+//        }
+//    }
 
     private String getCurrentTimeStamp() {
         return String.valueOf(System.currentTimeMillis() / 1000);

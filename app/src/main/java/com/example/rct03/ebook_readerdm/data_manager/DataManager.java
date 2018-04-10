@@ -1,9 +1,6 @@
 package com.example.rct03.ebook_readerdm.data_manager;
 
 import android.content.Context;
-import android.content.res.Resources;
-
-import com.example.rct03.ebook_readerdm.models.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,11 +29,11 @@ public class DataManager {
         return mSharedPrefsHelper.get(SharedPrefsHelper.PREF_KEY_ACCESS_TOKEN, null);
     }
 
-    public Long createUser(User user) throws Exception {
-        return mDbHelper.insertUser(user);
-    }
-
-    public User getUser(Long userId) throws Resources.NotFoundException, NullPointerException {
-        return mDbHelper.getUser(userId);
-    }
+//    public Long createUser(User user) throws Exception {
+//        return mDbHelper.insertUser(user);
+//    }
+//
+//    public User getUser(Long userId) throws Resources.NotFoundException, NullPointerException {
+//        return mDbHelper.getUser(userId);
+//    }
 }

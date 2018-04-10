@@ -8,9 +8,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.rct03.ebook_readerdm.App;
-import com.example.rct03.ebook_readerdm.EbookApi;
 import com.example.rct03.ebook_readerdm.R;
+import com.example.rct03.ebook_readerdm.data_service.EbookService;
 import com.example.rct03.ebook_readerdm.data_service.UserService;
+import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
+import com.example.rct03.ebook_readerdm.models.user.User;
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
 import com.google.gson.Gson;
 
@@ -26,10 +28,11 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
     @Inject
     UserService userService;
     @Inject
-    EbookApi ebookApi;
+    EbookService ebookService;
 
     @BindView(R.id.edtEmail)
     EditText edtUsername;
@@ -49,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
         App.getAppComponent().inject(this);
     }
 
-
-    /**
-     * Unsubscribes the mCompositeDisposable and unbind views
-     */
     @Override
     protected void onDestroy() {
         if (null != mCompositeDisposable) {
@@ -65,29 +64,60 @@ public class MainActivity extends AppCompatActivity {
     public void signIn(View view) {
         final String email = edtUsername.getText().toString();
         final String password = edtPassword.getText().toString();
-        Disposable disposable = userService.signIn(email, password)
+        showLoading();
+        final Disposable disposable = userService.signIn(email, password)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse, this::handleError);
 
         mCompositeDisposable.add(disposable);
 
-
-    }
-
-    private void showLoading(Disposable disposable) {
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void handleResponse(LoginResponse loginResponse) {
         Log.e(TAG, "signIn success: >>>" + new Gson().toJson(loginResponse));
+        getUserInfo(loginResponse);
+        getEbooks(loginResponse);
     }
+
+    private void getEbooks(LoginResponse loginResponse) {
+        final String token = "Token ".concat(loginResponse.getToken());
+        final Disposable disposable = ebookService.getEbooks(token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleEbooks, this::handleError);
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void handleEbooks(Ebooks ebooks) {
+        hideLoading();
+        Log.e(TAG, "handleEbooks: >>>Number of Ebook = " + new Gson().toJson(ebooks));
+        if (ebooks.getEbooks().size() > 0)
+            Log.e(TAG, "handleEbooks: >>>Title of Ebook  = " + ebooks.getEbooks().get(0).getTitle());
+    }
+
+    private void getUserInfo(LoginResponse loginResponse) {
+        final String token = "Token ".concat(loginResponse.getToken());
+        final Disposable disposable = userService.getUserAccount(token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleUserAccount, this::handleError);
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void handleUserAccount(User user) {
+        hideLoading();
+        Log.e(TAG, "handleUserAccount: >>>FirstName = " + user.getFirstName());
+    }
+
     private void handleError(Throwable error) {
         hideLoading();
         Log.e(TAG, "signIn error: >>>" + error.getLocalizedMessage());
     }
 
-
+    private void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
     protected void hideLoading() {
         progressBar.setVisibility(View.GONE);

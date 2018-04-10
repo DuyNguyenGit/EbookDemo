@@ -4,11 +4,14 @@ package com.example.rct03.ebook_readerdm.modules;
 import android.app.Application;
 
 import com.example.rct03.ebook_readerdm.EbookApi;
+import com.example.rct03.ebook_readerdm.data_service.EbookService;
+import com.example.rct03.ebook_readerdm.data_service.EbookServiceImpl;
 import com.example.rct03.ebook_readerdm.data_service.UserService;
 import com.example.rct03.ebook_readerdm.data_service.UserServiceImpl;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import javax.inject.Singleton;
 
@@ -16,6 +19,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -32,8 +36,7 @@ public class NetModule {
     @Singleton
     Cache provideOkHttpCache(Application application) {
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-        return cache;
+        return new Cache(application.getCacheDir(), cacheSize);
     }
 
     @Provides
@@ -47,7 +50,18 @@ public class NetModule {
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(Cache cache) {
-        return new OkHttpClient();
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.cache(cache).addInterceptor(chain -> {
+            Request original = chain.request();
+
+            // Request customization: add request headers
+            Request.Builder requestBuilder = original.newBuilder()
+                    .header("x-project", "sap-press"); // <-- this is the important line
+
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
+        });
+        return httpClient.build();
     }
 
     @Provides
@@ -55,14 +69,22 @@ public class NetModule {
     public EbookApi provideEbookApi(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(EbookApi.class);
     }
 
+    @Provides
+    @Singleton
+    UserService provideUserService(EbookApi api) {
+        return new UserServiceImpl(api);
+    }
 
     @Provides
     @Singleton
-    UserService provideUserService(UserServiceImpl userService) {
-        return userService;
+    EbookService provideEbookService(EbookApi api) {
+        return new EbookServiceImpl(api);
     }
+
 }

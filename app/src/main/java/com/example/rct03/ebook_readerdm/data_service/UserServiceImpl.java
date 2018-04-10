@@ -1,6 +1,8 @@
 package com.example.rct03.ebook_readerdm.data_service;
 
 import com.example.rct03.ebook_readerdm.EbookApi;
+import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
+import com.example.rct03.ebook_readerdm.models.user.User;
 import com.example.rct03.ebook_readerdm.models.responses.LoginResponse;
 
 import javax.inject.Inject;
@@ -29,4 +31,10 @@ public class UserServiceImpl implements UserService {
                 "Sam Sung J7",
                 "samsung");
     }
+
+    @Override
+    public Observable<User> getUserAccount(String token) {
+        return ebookApi.getUser(token);
+    }
+
 }
