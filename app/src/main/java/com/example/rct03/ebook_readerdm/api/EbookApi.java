@@ -5,12 +5,15 @@ import com.example.rct03.ebook_readerdm.models.user.User;
 import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 public interface EbookApi {
 
@@ -36,4 +39,13 @@ public interface EbookApi {
 
     @GET("account/ebooks")
     Observable<Ebooks> getEbooks(@Header("Authorization") String authorization);
+
+
+    @Headers({
+            "file_path: /OEBPS/content.opf",
+            "app_version : 0"
+    })
+    @Streaming
+    @GET
+    Observable<ResponseBody> download(@Header("Authorization") String authorization, @Url String url);
 }

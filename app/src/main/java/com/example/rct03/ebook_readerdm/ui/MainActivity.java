@@ -14,7 +14,12 @@ import com.example.rct03.ebook_readerdm.dataservices.UserService;
 import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
 import com.example.rct03.ebook_readerdm.models.user.User;
 import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
+import com.example.rct03.ebook_readerdm.util.FileUtils;
 import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -23,7 +28,10 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,8 +84,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleResponse(AuthToken authToken) {
         Log.e(TAG, "signIn success: >>>" + new Gson().toJson(authToken));
-        getUserInfo(authToken);
-        getEbooks(authToken);
+//        getUserInfo(authToken);
+//        getEbooks(authToken);
+
+        downloadEbook(authToken);
+    }
+
+    private void downloadEbook(AuthToken authToken) {
+        final String token = "Token ".concat(authToken.getToken());
+        final String ebookUrl = "http://eba.sap-press.com/ebooks/3228/download?app_version=0&file_path=content.opf";
+        final Disposable disposable = ebookService.downloadEbook(token, ebookUrl)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(FileUtils::writeResponseBodyToDisk, this::handleError);
+
+        mCompositeDisposable.add(disposable);
     }
 
     private void getEbooks(AuthToken authToken) {

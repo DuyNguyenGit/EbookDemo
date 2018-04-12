@@ -2,16 +2,22 @@ package com.example.rct03.ebook_readerdm.modules;
 
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.rct03.ebook_readerdm.api.EbookApi;
 import com.example.rct03.ebook_readerdm.dataservices.EbookService;
 import com.example.rct03.ebook_readerdm.dataservices.EbookServiceImpl;
 import com.example.rct03.ebook_readerdm.dataservices.UserService;
 import com.example.rct03.ebook_readerdm.dataservices.UserServiceImpl;
+import com.example.rct03.ebook_readerdm.netservices.Download;
+import com.example.rct03.ebook_readerdm.netservices.DownloadProgressInterceptor;
+import com.example.rct03.ebook_readerdm.netservices.DownloadProgressListener;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -27,6 +33,9 @@ import static com.example.rct03.ebook_readerdm.api.EbookApi.BASE_URL;
 
 @Module
 public class NetModule {
+
+    private static final String TAG = NetModule.class.getSimpleName();
+    private static final long DEFAULT_TIMEOUT = 15;
 
     public NetModule() {
 
@@ -51,16 +60,9 @@ public class NetModule {
     @Singleton
     OkHttpClient provideOkHttpClient(Cache cache) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.cache(cache).addInterceptor(chain -> {
-            Request original = chain.request();
-
-            // Request customization: add request headers
-            Request.Builder requestBuilder = original.newBuilder()
-                    .header("x-project", "sap-press"); // <-- this is the important line
-
-            Request request = requestBuilder.build();
-            return chain.proceed(request);
-        });
+        DownloadProgressInterceptor interceptor = new DownloadProgressInterceptor(listener);
+        httpClient.cache(cache).addInterceptor(interceptor)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         return httpClient.build();
     }
 
@@ -87,4 +89,18 @@ public class NetModule {
         return new EbookServiceImpl(api);
     }
 
+
+    DownloadProgressListener listener = (bytesRead, contentLength, done) -> {
+        Download download = new Download();
+        download.setTotalFileSize(contentLength);
+        download.setCurrentFileSize(bytesRead);
+        int progress = (int) ((bytesRead * 100) / contentLength);
+        download.setProgress(progress);
+
+        sendNotification(download);
+    };
+
+    private void sendNotification(Download download) {
+        Log.e(TAG, "sendNotification: >>>" + download.getProgress() + "%");
+    }
 }
