@@ -32,7 +32,7 @@ public class FileUtils {
     private static boolean writeToDisk(ResponseBody body) {
         try {
             // todo change the file location/name according to your needs
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "MyEbook.epub");
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "content.opf");
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -80,4 +80,24 @@ public class FileUtils {
     }
 
 
+    public static void getSingleFile(ResponseBody responseBody) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                boolean decryptSuccess = decryptSingleFile(responseBody);
+
+                Log.d(TAG, "decrypt file was a success? " + decryptSuccess);
+                return null;
+            }
+        }.execute();
+    }
+
+    private static boolean decryptSingleFile(ResponseBody responseBody) {
+        try {
+            Log.e(TAG, "decryptSingleFile: >>>" + responseBody.string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

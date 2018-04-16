@@ -10,4 +10,6 @@ public interface EbookService {
     Observable<Ebooks> getEbooks(String token);
 
     Observable<ResponseBody> downloadEbook(String token, String url);
+
+    Observable<ResponseBody> downloadSingleFile(String token, String appVersion, String url);
 }

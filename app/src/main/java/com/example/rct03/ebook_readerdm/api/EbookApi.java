@@ -48,4 +48,10 @@ public interface EbookApi {
     @Streaming
     @GET
     Observable<ResponseBody> download(@Header("Authorization") String authorization, @Url String url);
+
+
+    @GET
+    Observable<ResponseBody> downloadSingleFile(@Header("Authorization") String authorization,
+                                      @Header("app_version") String appVersion,
+                                      @Url String url);
 }

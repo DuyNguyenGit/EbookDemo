@@ -27,4 +27,9 @@ public class EbookServiceImpl implements EbookService {
     public Observable<ResponseBody> downloadEbook(String token, String url) {
         return ebookApi.download(token, url);
     }
+
+    @Override
+    public Observable<ResponseBody> downloadSingleFile(String token, String appVersion, String url) {
+        return ebookApi.downloadSingleFile(token, appVersion, url);
+    }
 }

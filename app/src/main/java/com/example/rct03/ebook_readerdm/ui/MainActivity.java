@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
 //        getUserInfo(authToken);
 //        getEbooks(authToken);
 
-        downloadEbook(authToken);
+        //downloadEbook(authToken);
+        downloadSingleFile(authToken);
     }
 
     private void downloadEbook(AuthToken authToken) {
@@ -97,6 +98,18 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(FileUtils::writeResponseBodyToDisk, this::handleError);
+
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void downloadSingleFile(AuthToken authToken) {
+        final String token = "Token ".concat(authToken.getToken());
+        final String appVersion = "0";
+        final String singleUrl = "http://eba.sap-press.com/ebooks/3228/download?app_version=0&file_path=Text/01_Type_001.html";
+        final Disposable disposable = ebookService.downloadSingleFile(token, appVersion, singleUrl)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(FileUtils::getSingleFile, this::handleError);
 
         mCompositeDisposable.add(disposable);
     }
