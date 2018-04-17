@@ -19,13 +19,13 @@ public class CryptoHandler {
     private static CryptoHandler instance = null;
     private static byte[] KEY;
     // Your IV Initialization Vector
-    private final static byte[] ivx = Globals.AES_IVX;
+    private final static byte[] ivx = Globals.IV.getBytes();
 
     protected CryptoHandler() {
 
         try {
-            //Your Secret Key
-            KEY = Globals.AES_SECRET_KEY.getBytes("UTF8");
+            //Your App Key
+            KEY = Globals.APP_KEY.getBytes("UTF8");
         } catch (UnsupportedEncodingException e) {
 
             e.printStackTrace();

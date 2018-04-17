@@ -6,6 +6,7 @@ import com.example.rct03.ebook_readerdm.models.authentication.AuthToken;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -51,7 +52,7 @@ public interface EbookApi {
 
 
     @GET
-    Observable<ResponseBody> downloadSingleFile(@Header("Authorization") String authorization,
-                                      @Header("app_version") String appVersion,
-                                      @Url String url);
+    Observable<Response<ResponseBody>> downloadSingleFile(@Header("Authorization") String authorization,
+                                            @Header("app_version") String appVersion,
+                                            @Url String url);
 }

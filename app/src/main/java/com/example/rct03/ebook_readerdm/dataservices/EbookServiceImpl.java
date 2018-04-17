@@ -6,6 +6,7 @@ import com.example.rct03.ebook_readerdm.models.ebooks.Ebooks;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class EbookServiceImpl implements EbookService {
@@ -29,7 +30,7 @@ public class EbookServiceImpl implements EbookService {
     }
 
     @Override
-    public Observable<ResponseBody> downloadSingleFile(String token, String appVersion, String url) {
+    public Observable<retrofit2.Response<ResponseBody>> downloadSingleFile(String token, String appVersion, String url) {
         return ebookApi.downloadSingleFile(token, appVersion, url);
     }
 }
