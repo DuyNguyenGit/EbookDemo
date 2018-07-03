@@ -19,7 +19,7 @@ import retrofit2.http.Url;
 public interface EbookApi {
 
 
-    String BASE_URL = "http://eba.sap-press.com/";
+    String BASE_URL = "http://eba.sap-press.com/v1/";
 
     @Headers({
             "Content-Type: application/x-www-form-urlencoded"
