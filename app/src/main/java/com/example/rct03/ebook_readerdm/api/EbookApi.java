@@ -55,4 +55,9 @@ public interface EbookApi {
     Observable<Response<ResponseBody>> downloadSingleFile(@Header("Authorization") String authorization,
                                             @Header("app_version") String appVersion,
                                             @Url String url);
+
+    @GET
+    Observable<Response<ResponseBody>> test1(@Header("Authorization") String authorization,
+                                            @Header("app_version") String appVersion,
+                                            @Url String url);
 }
